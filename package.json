@@ -1,0 +1,23 @@
+{
+  "name": "flashcard-gen",
+  "version": "1.0.0",
+  "description": "a command line trivia app using cloze tests.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kristalane/flashcard-gen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kristalane/flashcard-gen/issues"
+  },
+  "homepage": "https://github.com/kristalane/flashcard-gen#readme",
+  "dependencies": {
+    "inquirer": "^3.2.0"
+  }
+}
