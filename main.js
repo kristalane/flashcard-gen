@@ -1,29 +1,94 @@
 var basic = require("./BasicCard");
-var cloze = require("./ClozeCard");
+var clozeCard = require("./ClozeCard");
 var inquirer = require("inquirer");
+var fs = require("fs");
 
 var command = process.argv.slice(2).join(" ");
 
-// if (command === "add basic") {
-//   console.log("Would you like to add a new Basic or Cloze flashcard?");
-// }
-var testing = new basic("Front side question?", "back side answer");
+var questions = [];
+var answers = [];
 
-console.log(testing);
-//
-// function whichCard() {
-//
-// };
-//
-// function quizMe() {
-//   var answer = process.argv.slice(3).join(" ");
-//   if (command === "study") {
-//
-//   }
-// };
+// here we use a switch to decide where to go next in the program based on user input.
+switch (command) {
+  case 'study':
+    quizMe();
+    break;
+  case 'add':
+    inquirer.prompt([
+      {type: 'rawlist',
+      name: 'cardstart',
+      message: 'Which type of card would you like to make?',
+      choices: ['Basic', 'Cloze']
+      }
+    ]).then(function (response) {
+      if (response['cardstart'] === 'Basic') {
+        basicCreate();
+      }
+      if (response['cardstart'] === 'Cloze') {
+        clozeCreate();
+      }
+    });
+    break;
+  default:
+    helpMe();
+}
 
-// function helpMe() {
-//   // if no command after process.argv[1] is entered, run this helper text function that explains which commands do what.
-//   // if user enters "study", all the cards already loaded will run. This is defined by quizMe()
-//   // if user enters "add", they will be able to make new flashcards. This is defined by addNewCard()
-// }
+function basicCreate() {
+  inquirer.prompt([
+    {type: 'input',
+    name: 'basicQ',
+    message: 'What is the question?'
+    },
+    {type: 'input',
+    name: 'basicA',
+    message: 'OK, now what is the answer?'
+    }
+  ]).then(function (response) {
+    var newBasic = new basic(response['basicQ'], response['basicA']);
+    // figure out where to store this. Into an array? or log file?
+    // let data = {
+    //
+    // };
+    // question.push(data);
+  });
+};
+
+function clozeCreate() {
+  inquirer.prompt([
+    {type: 'input',
+    name: 'clozeFull',
+    message: 'What is the full statement?'
+    },
+    {type: 'input',
+    name: 'clozeA',
+    message: 'OK, now what is the answer?'
+    }
+  ]).then(function (response) {
+    var newCloze = new cloze(response['basicQ'], response['basicA']);
+    // figure out where to store this. Into an array? or log file?
+    // let data = {
+    //
+    // };
+    // question.push(data);
+  });
+}
+
+function quizMe() {
+  var answer = process.argv.slice(3).join(" ");
+  console.log("yay got to quizme");
+
+};
+
+function helpMe() {
+  console.log("You must be new here... How about you try one of these commands:" +
+  "\n--Type 'study' to be quizzed." +
+  "\n--Type 'add' to create new flashcards.");
+};
+
+function logData() {
+  fs.appendFile("./log.txt", data, function(err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
+};
