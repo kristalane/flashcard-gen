@@ -8,7 +8,7 @@ var command = process.argv.slice(2).join(" ");
 // where I will store data.
 var trivia = [];
 
-// here we use a switch to decide where to go next in the program based on user input.
+// here we use a switch to decide where to go in the program based on user input.
 switch (command) {
   case 'study':
     quizMe();
@@ -33,6 +33,7 @@ switch (command) {
     helpMe();
 }
 
+// function to create basic flashcards using the constructor from BasicCard.js and inquirer for user input.
 function basicCreate() {
   inquirer.prompt([
     {type: 'input',
@@ -50,6 +51,7 @@ function basicCreate() {
   });
 };
 
+// function to create the cloze card using the constructor defined in ClozeCard.js and inquirer to get input from the user.
 function clozeCreate() {
   inquirer.prompt([
     {type: 'input',
@@ -64,23 +66,37 @@ function clozeCreate() {
     var newCloze = new clozeCard(data['clozeFull'], data['clozePart']);
     var partial = data['clozeFull'].replace(data['clozePart'], '...');
     trivia.push(newCloze, partial)
-
+    whatNext();
   });
 }
 
+// Quizzing function
 function quizMe() {
   var count = 0;
   if (count < trivia.length) {
-    // loop through array, perhaps using inquirer?
+    // loop through trivia array, perhaps using inquirer?
     checkAnswer();
     count++;
   }
   else {
+    console.log("You are all out of questions.")
     whatNext();
   }
   quizMe();
 };
 
+// function to check whether the user's answer is correct
+function checkAnswer() {
+  var userAnswer = process.argv.slice(3).join(" ");
+  if (userAnswer === basicA || cloze) {
+    console.log("Yeehaw, you got it right!")
+  }
+  else { console.log("Whoopsies! That's the wrong answer. The right one is:\n");
+  return this.cloze;
+  }
+};
+
+// helper function to keep the program running when called (when another function completes).
 function whatNext() {
   inquirer.prompt([
     {type: 'rawlist',
@@ -101,16 +117,7 @@ function whatNext() {
   });
 }
 
-function checkAnswer() {
-  var userAnswer = process.argv.slice(3).join(" ");
-  if (userAnswer === basicA || cloze) {
-    console.log("Yeehaw, you got it right!")
-  }
-  else { console.log("Whoopsies! That's the wrong answer. The right one is:\n");
-  return this.cloze;
-  }
-};
-
+// helper function which is called if user enters an empty string or an unrecognized command.
 function helpMe() {
   console.log("You must be new here... How about you try one of these commands:" +
   "\n--Type 'study' to be quizzed." +
