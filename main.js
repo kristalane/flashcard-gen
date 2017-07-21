@@ -46,7 +46,7 @@ function basicCreate() {
   ]).then(function (response) {
     var newBasic = new basic(response['basicQ'], response['basicA']);
     trivia.push(newBasic);
-    logData();
+    whatNext();
   });
 };
 
@@ -70,35 +70,39 @@ function clozeCreate() {
 
 function quizMe() {
   var count = 0;
-  var userAnswer = process.argv.slice(3).join(" ");
   if (count < trivia.length) {
     // loop through array, perhaps using inquirer?
+    checkAnswer();
     count++;
   }
   else {
-    inquirer.prompt([
-      {type: 'rawlist',
-      name: 'endOfQuiz',
-      message: 'All out of questions! What do you want to do next?',
-      choices: ['Add new basic', 'Add new cloze', 'Restart Quiz']
-      }
-    ]).then(function(data) {
-      if (data['endOfQuiz'] === 'Add new basic') {
-        basicCreate();
-      }
-      if (data['endOfQuiz'] === 'Add new cloze') {
-        clozeCreate();
-      }
-      if (data['endOfQuiz'] === 'Restart Quiz') {
-        quizMe();
-      }
-    });
+    whatNext();
   }
-  checkAnswer();
   quizMe();
 };
 
+function whatNext() {
+  inquirer.prompt([
+    {type: 'rawlist',
+    name: 'whatNext',
+    message: 'What do you want to do next?',
+    choices: ['Add new basic', 'Add new cloze', 'Quiz']
+    }
+  ]).then(function(data) {
+    if (data['endOfQuiz'] === 'Add new basic') {
+      basicCreate();
+    }
+    if (data['endOfQuiz'] === 'Add new cloze') {
+      clozeCreate();
+    }
+    if (data['endOfQuiz'] === 'Quiz') {
+      quizMe();
+    }
+  });
+}
+
 function checkAnswer() {
+  var userAnswer = process.argv.slice(3).join(" ");
   if (userAnswer === basicA || cloze) {
     console.log("Yeehaw, you got it right!")
   }
@@ -111,12 +115,4 @@ function helpMe() {
   console.log("You must be new here... How about you try one of these commands:" +
   "\n--Type 'study' to be quizzed." +
   "\n--Type 'add' to create new flashcards.");
-};
-
-function logData() {
-  fs.appendFile("./log.txt", data, function(err) {
-    if (err) {
-      return console.log(err);
-    }
-  });
 };
