@@ -5,8 +5,8 @@ var fs = require("fs");
 
 var command = process.argv.slice(2).join(" ");
 
-var questions = [];
-var answers = [];
+// where I will store data.
+var trivia = [];
 
 // here we use a switch to decide where to go next in the program based on user input.
 switch (command) {
@@ -45,11 +45,8 @@ function basicCreate() {
     }
   ]).then(function (response) {
     var newBasic = new basic(response['basicQ'], response['basicA']);
-    // figure out where to store this. Into an array? or log file?
-    // let data = {
-    //
-    // };
-    // question.push(data);
+    trivia.push(newBasic);
+    logData();
   });
 };
 
@@ -60,23 +57,54 @@ function clozeCreate() {
     message: 'What is the full statement?'
     },
     {type: 'input',
-    name: 'clozeA',
-    message: 'OK, now what is the answer?'
+    name: 'clozePart',
+    message: 'OK, now which part of the statement do you want to remove?'
     }
-  ]).then(function (response) {
-    var newCloze = new cloze(response['basicQ'], response['basicA']);
-    // figure out where to store this. Into an array? or log file?
-    // let data = {
-    //
-    // };
-    // question.push(data);
+  ]).then(function (data) {
+    var newCloze = new clozeCard(data['clozeFull'], data['clozePart']);
+    var partial = data['clozeFull'].replace(data['clozePart'], '...');
+    trivia.push(newCloze, partial)
+
   });
 }
 
 function quizMe() {
-  var answer = process.argv.slice(3).join(" ");
-  console.log("yay got to quizme");
+  var count = 0;
+  var userAnswer = process.argv.slice(3).join(" ");
+  if (count < trivia.length) {
+    // loop through array, perhaps using inquirer?
+    count++;
+  }
+  else {
+    inquirer.prompt([
+      {type: 'rawlist',
+      name: 'endOfQuiz',
+      message: 'All out of questions! What do you want to do next?',
+      choices: ['Add new basic', 'Add new cloze', 'Restart Quiz']
+      }
+    ]).then(function(data) {
+      if (data['endOfQuiz'] === 'Add new basic') {
+        basicCreate();
+      }
+      if (data['endOfQuiz'] === 'Add new cloze') {
+        clozeCreate();
+      }
+      if (data['endOfQuiz'] === 'Restart Quiz') {
+        quizMe();
+      }
+    });
+  }
+  checkAnswer();
+  quizMe();
+};
 
+function checkAnswer() {
+  if (userAnswer === basicA || cloze) {
+    console.log("Yeehaw, you got it right!")
+  }
+  else { console.log("Whoopsies! That's the wrong answer. The right one is:\n");
+  return this.cloze;
+  }
 };
 
 function helpMe() {

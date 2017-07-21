@@ -1,9 +1,8 @@
 
-var ClozeCard = function(text, cloze, partial, fullText) {
-  this.text = text;
-  this.cloze = cloze;
-  this.partial = partial;
+var ClozeCard = function(fullText, cloze) {
   this.fullText = fullText;
+  this.cloze = cloze;
+  
 };
 
 module.exports = ClozeCard;
