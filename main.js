@@ -72,17 +72,16 @@ function clozeCreate() {
 
 // Quizzing function
 function quizMe() {
-  var count = 0;
-  if (count < trivia.length) {
-    // loop through trivia array, perhaps using inquirer?
-    checkAnswer();
-    count++;
-  }
-  else {
-    console.log("You are all out of questions.")
+  // for (var i = 0; i < trivia.length; i++) {
+  //    this should (in theory) loop through and display each question. Not sure if this will work as expected, since I'm not stopping to get answers. I originally wanted to build a recursive function with inquirer, but have run out of time and thought the loop would be faster.
+  //     checkAnswer();
+  //   }
+  // if (i === trivia.length) {
+  //   console.log("You are all out of questions.")
+    console.log("This function is not working at the moment.")
     whatNext();
-  }
-  quizMe();
+  // }
+  // quizMe();
 };
 
 // function to check whether the user's answer is correct
